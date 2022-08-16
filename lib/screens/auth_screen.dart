@@ -45,7 +45,6 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('${result.user!.uid}.jpg');
 
         await ref.putFile(img).whenComplete(() {
-          print("uploaded");
         });
 
         final imgUrl = await ref.getDownloadURL();
