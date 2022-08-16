@@ -76,7 +76,6 @@ class _AuthScreenState extends State<AuthScreen> {
       );
 
     } catch (err) {
-      print("on catch error");
       print(err);
     }
   }
