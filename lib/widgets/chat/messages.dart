@@ -25,7 +25,8 @@ class _MessagesState extends State<Messages> {
           return const Center(child: CircularProgressIndicator());
         }
         final docs = chatSnapshot.data!.docs;
-        return ListView.builder(
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
           reverse: true,
           itemCount: docs.length,
           itemBuilder: (ctx, i) => MessageBubble(
@@ -33,6 +34,9 @@ class _MessagesState extends State<Messages> {
             isMe: FirebaseAuth.instance.currentUser!.uid == docs[i]['sentBy'],
             username: docs[i]['username'],
             img: docs[i]['userImg'],
+          ),
+          separatorBuilder: (BuildContext context, int index) => const SizedBox(
+            height: 16,
           ),
         );
       },
