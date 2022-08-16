@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chatapp/widgets/pickers/image_picker.dart';
 import 'package:flutter/material.dart';
 
 enum AuthMode { SignUp, Login }
@@ -21,6 +24,8 @@ class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
 
+  File? pickedImg;
+
   void _switchAuthMode() {
     if (authMode == AuthMode.Login) {
       setState(() {
@@ -33,6 +38,29 @@ class _AuthFormState extends State<AuthForm> {
         _isLogin = true;
       });
     }
+  }
+
+  void _submitData() {
+    if (pickedImg == null && !_isLogin) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("please choose an image")),
+      );
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
+      widget.trySubmit(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+        usernameController.text.trim(),
+        pickedImg!,
+        _isLogin,
+        context,
+      );
+    }
+  }
+
+  void _pickImgFun(File img) {
+    pickedImg = img;
   }
 
   @override
@@ -48,6 +76,10 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (!_isLogin)
+                    AvatarPicker(
+                      pickImgFun: _pickImgFun,
+                    ),
                   TextFormField(
                     decoration: const InputDecoration(
                       label: Text('E-mail'),
@@ -102,13 +134,7 @@ class _AuthFormState extends State<AuthForm> {
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () {
-                            widget.trySubmit(
-                              emailController.text.trim(),
-                              passwordController.text.trim(),
-                              usernameController.text.trim(),
-                              _isLogin,
-                              context,
-                            );
+                            _submitData();
                           },
                           child: Text(
                             authMode == AuthMode.Login ? "Login" : "Signup",

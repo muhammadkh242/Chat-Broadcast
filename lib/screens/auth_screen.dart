@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:chatapp/widgets/auth/auth_form.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String password,
     String username,
+    File img,
     bool isLogin,
     BuildContext context,
   ) async {
@@ -26,6 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
     });
     try {
       if (isLogin) {
+        print("login");
         final result = await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
@@ -35,6 +40,17 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child('${result.user!.uid}.jpg');
+
+        await ref.putFile(img).whenComplete(() {
+          print("uploaded");
+        });
+
+        final imgUrl = await ref.getDownloadURL();
+
         FirebaseFirestore.instance
             .collection("users")
             .doc(result.user!.uid)
@@ -42,6 +58,7 @@ class _AuthScreenState extends State<AuthScreen> {
           {
             'username': username,
             'email': email,
+            'imageUrl': imgUrl,
           },
         );
       }
@@ -59,15 +76,10 @@ class _AuthScreenState extends State<AuthScreen> {
           duration: const Duration(seconds: 3),
         ),
       );
-      setState(() {
-        _isLoading = false;
-      });
+
     } catch (err) {
       print("on catch error");
       print(err);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 

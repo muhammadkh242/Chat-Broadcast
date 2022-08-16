@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chatapp/widgets/chat/message_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,6 +32,7 @@ class _MessagesState extends State<Messages> {
             msg: docs[i]['text'],
             isMe: FirebaseAuth.instance.currentUser!.uid == docs[i]['sentBy'],
             username: docs[i]['username'],
+            img: docs[i]['userImg'],
           ),
         );
       },
