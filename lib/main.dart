@@ -20,8 +20,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
 
       theme: ThemeData(
-        primarySwatch: Colors.teal,
-
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+          primary: Colors.teal,
+          secondary: Colors.amber,
+        )
       ),
       debugShowCheckedModeBanner: false,
       title: 'Chat',

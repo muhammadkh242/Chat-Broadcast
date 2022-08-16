@@ -1,3 +1,5 @@
+import 'package:chatapp/widgets/chat/messages.dart';
+import 'package:chatapp/widgets/chat/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,35 +10,29 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Chats"),
-          actions: [
-            IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: const Icon(Icons.exit_to_app),
-            )
+      appBar: AppBar(
+        title: const Text("Chats"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: const Icon(Icons.exit_to_app),
+          )
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          children: const [
+            Expanded(
+              child: Messages(),
+            ),
+            SizedBox(height: 10),
+            NewMessage(),
           ],
         ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('chats/awjgYxlfNSrf3mvXBJ1v/messages')
-              .snapshots(),
-          builder: (ctx, streamSnapshot) {
-            if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final docs = streamSnapshot.data!.docs;
-            print(docs[0]['text']);
-            return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (ctx, i) => Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(docs[i]['text']),
-              ),
-            );
-          },
-        ));
+      ),
+    );
   }
 }
