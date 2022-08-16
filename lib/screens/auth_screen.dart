@@ -30,8 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
     });
     try {
       if (isLogin) {
-        print("login");
-        final result = await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
