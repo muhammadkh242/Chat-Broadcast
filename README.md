@@ -1,4 +1,4 @@
-# Messages
+# Broadcasting Chat
 Simple cross-platform mobile application built with Flutter.
 broadcasting messages using firebase.
 
