@@ -17,7 +17,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
   void _pickImage() async {
     final picker = ImagePicker();
     final pickedImageXFile = await picker.pickImage(
-      source: ImageSource.camera,
+      source: ImageSource.gallery,
       imageQuality: 50,
       maxWidth: 150,
     );
@@ -27,7 +27,6 @@ class _AvatarPickerState extends State<AvatarPicker> {
     });
     widget.pickImgFun(pickedImageFile);
   }
-
   @override
   Widget build(BuildContext context) {
     return Column(
