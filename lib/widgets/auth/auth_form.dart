@@ -52,7 +52,7 @@ class _AuthFormState extends State<AuthForm> {
         emailController.text.trim(),
         passwordController.text.trim(),
         usernameController.text.trim(),
-        pickedImg!,
+        _isLogin ? null : pickedImg,
         _isLogin,
         context,
       );
@@ -135,6 +135,7 @@ class _AuthFormState extends State<AuthForm> {
                       : ElevatedButton(
                           onPressed: () {
                             _submitData();
+                            print("submit");
                           },
                           child: Text(
                             authMode == AuthMode.Login ? "Login" : "Signup",

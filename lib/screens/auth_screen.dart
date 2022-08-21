@@ -21,7 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String password,
     String username,
-    File img,
+    File? img,
     bool isLogin,
     BuildContext context,
   ) async {
@@ -44,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_image')
             .child('${result.user!.uid}.jpg');
 
-        await ref.putFile(img).whenComplete(() {
+        await ref.putFile(img!).whenComplete(() {
         });
 
         final imgUrl = await ref.getDownloadURL();
